@@ -1,42 +1,54 @@
-import { GraphQLServer } from 'graphql-yoga';
+import { GraphQLServer } from 'graphql-yoga'
 
 // Type definitions (schema)
 const typeDefs = `
     type Query {
-    title: String!
-    price: Float!
-    releaseYear: Int
-    rating: Float
-    inStock: Boolean!
+      me: User!
+      post: Post!
     }
-`;
+
+    type User {
+      id: ID!
+      name: String!
+      email : String!
+      age: Int
+    }
+
+    type Post {
+      id: ID!
+      title: String!
+      body: String!
+      published: Boolean!
+    }
+`
 
 // Resolvers
 const resolvers = {
   Query: {
-    title() {
-      return 'Le seigneur des anneaux';
+    me() {
+      return {
+        id: '123098',
+        name: 'Mike',
+        email: 'mike@example.com',
+        age: 28,
+      }
     },
-    price() {
-      return 25.5;
-    },
-    releaseYear() {
-      return 1980;
-    },
-    rating() {
-      return 5;
-    },
-    inStock() {
-      return true;
+    post() {
+      return {
+        id: '092',
+        title: 'GraphQL 101',
+        body: '',
+        published: false,
+      }
     },
   },
-};
+}
 
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
-});
+})
 
 server.start(() => {
-  console.log('The server is up!');
-});
+  console.log('The server is up!')
+})
