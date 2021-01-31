@@ -162,23 +162,19 @@ const resolvers = {
   },
   Mutation: {
     createUser(parent, args, ctx, info) {
-      const { name, email, age } = args
       const emailTaken = users.some((user) => user.email === args.email)
       if (emailTaken) {
         throw new Error('Email taken.')
       }
       const user = {
         id: uuidv4(),
-        name,
-        email,
-        age,
+        ...args,
       }
       users.push(user)
 
       return user
     },
     createPost(parent, args, ctx, info) {
-      const { title, body, published, author } = args
       const userExists = users.some((user) => user.id === args.author)
 
       if (!userExists) {
@@ -187,10 +183,7 @@ const resolvers = {
 
       const post = {
         id: uuidv4(),
-        title,
-        body,
-        published,
-        author,
+        ...args,
       }
 
       posts.push(post)
@@ -198,7 +191,6 @@ const resolvers = {
       return post
     },
     createComment(parent, args, ctx, info) {
-      const { text, author, post } = args
       const userExists = users.some((user) => user.id === author)
       const postExist = posts.some(
         (post) => post.id === args.post && post.published
@@ -209,9 +201,7 @@ const resolvers = {
 
       const comment = {
         id: uuidv4(),
-        text,
-        author,
-        post,
+        ...args,
       }
 
       comments.push(comment)
